@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "759727010693",
+    "project_id": "embedded-7af04",
+    "storage_bucket": "embedded-7af04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:759727010693:android:d33efe823bb81c9c068aec",
+        "android_client_info": {
+          "package_name": "com.example.embedded"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "759727010693-kvon9ofr6rrbm1mq84d98c2bv38h65ec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsRcdsFxFuhWuA4Ex053KrHtIjM1b27_k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "759727010693-kvon9ofr6rrbm1mq84d98c2bv38h65ec.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
