@@ -46,14 +46,14 @@ void *GetAnswer(char *answer){
 			printf("file close\n");
 			//printf("%s,%s,%s",tmp[0],tmp[1],tmp[2]);
 			
-			if(!strcmp(tmp[0],"true")){
+			if(!strcmp(tmp[0],"true\n")){
 				start = 1;
 			}
 			
-			if(!strcmp(tmp[0],"true")){
+			if(!strcmp(tmp[2],"true\n")){
 				equal = 1;
 			}
-			strcpy(answer,tmp[2]);
+			strcpy(answer,tmp[1]);
 
 			printf("game.c -> finish reading\n");
 			printf("start = %d\n",start);
