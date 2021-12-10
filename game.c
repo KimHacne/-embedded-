@@ -12,17 +12,17 @@ void *GetAnswer(char *); //get answer from answer.txt
 
 int main(){
 	
-	char *answer = malloc(sizeof(char)*10);
+	//char *answer = malloc(sizeof(char)*10);
 	pthread_t thread;
 	int t;
 	system("python3 makeRandom.py");
-	t = pthread_create(&thread,NULL,GetAnswer(answer),NULL);
+	t = pthread_create(&thread,NULL,GetAnswer,NULL);
 	
 	pthread_exit(NULL);
 }
 
 
-void *GetAnswer(char *answer){
+void *GetAnswer(){
 
 	FILE *f;
 	char *tmp[3]; //start result equal
