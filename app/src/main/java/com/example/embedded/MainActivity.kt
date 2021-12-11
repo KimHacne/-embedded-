@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var input : String
     lateinit var answer : String
     var equal : Boolean = false
-    var start : Boolean = false
+    lateinit var start : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +32,12 @@ class MainActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val map = snapshot.value as Map<*,*>
                 answer=map["answer"].toString()
-                start = map["start"] as Boolean
+                start = map["start"].toString()
                 Log.d("answer","$answer")
                 Log.d("start","$start")
 
                 //시작이 true가 되면 입력칸과 버튼이 보임
-                if(start){
+                if(start.equals("true")){
                     is_start.isVisible=false
                     num.isVisible=true
                     check.isVisible=true
