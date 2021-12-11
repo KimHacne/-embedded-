@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val map = snapshot.value as Map<*,*>
                 answer=map["answer"].toString()
-                start= map["start"] as Boolean
+                start = map["start"] as Boolean
                 Log.d("answer","$answer")
                 Log.d("start","$start")
 
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 input = num.text.toString()
                 Log.d("input", "$input")
-                answerRef.child("input").setValue(input)
+                //answerRef.child("input").setValue(input)
 
                 //answer변수값과 input변수값 비교 후 euqaul값 RDB전송
                 if (answer == input) {
@@ -65,9 +65,9 @@ class MainActivity : AppCompatActivity() {
                     Log.d("equal", "$equal")
 
                     //데이터 초기화
-                    answerRef.child("equal").setValue(false)
-                    answerRef.child("input").setValue("")
-                    answerRef.child("start").setValue(false)
+//                    answerRef.child("equal").setValue(false)
+//                    answerRef.child("input").setValue("")
+//                    answerRef.child("start").setValue(false)
 
                     //정답이면 SuccessActivity로 전환
                     val intent = Intent(this,SuccessActivity::class.java)
@@ -81,9 +81,9 @@ class MainActivity : AppCompatActivity() {
                     Log.d("equal", "$equal")
 
                     //데이터 초기화
-                    answerRef.child("equal").setValue(false)
-                    answerRef.child("input").setValue("")
-                    answerRef.child("start").setValue(false)
+//                    answerRef.child("equal").setValue(false)
+//                    answerRef.child("input").setValue("")
+//                    answerRef.child("start").setValue(false)
 
                     //틀리면 FailActivity로 전환
                     val intent = Intent(this,FailActivity::class.java)
