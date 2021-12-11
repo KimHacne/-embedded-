@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     val answerRef = db.getReference("game")
     lateinit var input : String
     lateinit var answer : String
-    var equal : Boolean = false
+    lateinit var equal : String
     lateinit var start : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
                 //answer변수값과 input변수값 비교 후 euqaul값 RDB전송
                 if (answer == input) {
-                    equal = true
+                    equal = "true"
                     answerRef.child("equal").setValue(equal)
                     Log.d("equal", "$equal")
 
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                     overridePendingTransition(R.anim.slide_left_enter,R.anim.slide_left_exit)
 
                 } else {
-                    equal = false
+                    equal = "false"
                     answerRef.child("equal").setValue(equal)
                     Log.d("equal", "$equal")
 
