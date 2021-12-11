@@ -34,6 +34,10 @@ result = ''
 for i in range(4):
     result += random.choice(string_pool)
 start = 'true'
+f = open('random.txt','w')
+f.write(result)
+f.close()
+start = 'true'
 
 dir = db.reference('game')
 dir.update({'answer':result})
