@@ -52,7 +52,7 @@ void dot_call(int dot_num);
 void text_call(unsigned char* str);
 void led_call(void);
 void motor_call(int onoff , int dir);
-void start(void);
+void go(void);
 void open_devices(void);
 void close_devices(void);
 
@@ -71,7 +71,7 @@ int main(void)
 {
 
 	open_devices();
-	start();
+	go();
     sleep(1);
     game1();
 	usleep(1000000);
@@ -80,7 +80,7 @@ int main(void)
 //	fnd_call(1111);
 //	dot_call(2);
 //	led_call();
-    usleep(1000000);
+    usleep(10000000);
 	motor_call(0 , 0);
 
 	close_devices();
@@ -88,7 +88,7 @@ int main(void)
 	return 0;
 }
 //game 시작
-void start(void)
+void go(void)
 {
 	text_call("Welcome to the  3leg nakg game!");
 	led_call();
@@ -102,8 +102,7 @@ void game1()
     if(bridge()<0)
         printf("bridge err\n");
 
-    text_call("Game 1 clear");
-    printf("Game 1 clear\n");
+
 
 }
 void game2(void)
@@ -111,19 +110,36 @@ void game2(void)
 	text_call("  game 2 start  speednumber game");
 	printf("game 2 start! \n");
 	dot_call(2);
-
+	
     pthread_t thread;
 	int t;
     char *zero ="0000";
-	system("python3 makeRandom.py");
-    
+	FILE *f;
+	char *tmp;
+	 while(1){
+		 sleep(1);
+		 
+                if((f=fopen("random.txt","r"))){
+                        char *str;
+			printf("answer reading\n");
+                        str = (char*)malloc(sizeof(char)*100);
+                        fgets(str,100,f);
+                        tmp = str;
+			strcpy(answer,tmp);
+			printf("%s\n",answer);
+			printf("answer reading finish\n");
+                        fclose(f);
+			break;
+                }
+        }
 	t = pthread_create(&thread,NULL,GetAnswer,NULL);
 
     fnd_call(answer);
-    usleep(300000);
+    usleep(700000);
     fnd_call(zero);
 
     while(1){
+	sleep(1);
         if(start == 1){
             if(equal == 1){
                 printf("\n======================\n");
@@ -132,11 +148,12 @@ void game2(void)
                 text_call("You are Winner");
                 led_call();
                 motor_call(1,1);
-
+		break;
             }else{
                 printf("game 2 failed\n");
                 text_call("     you die        game over   ");
-                exit(0);
+		close_devices();
+                break;
             }
         }
 
@@ -174,7 +191,7 @@ void led_call(void)
 
 	char led_data = 0x00;
 	write(led_dev, &led_data ,1);
-	for(int i = 0; i < 10; i++)
+	for(int i = 0; i < 40; i++)
 	{
 		if(i % 2 == 0)
 		{
@@ -300,7 +317,7 @@ int bridge(void){
         for(int k=2;k>=0;k--){
                 int n1, n2, n3;
                 putRan(&n1, &n2, &n3);
-                //printf("answer : %d\n", n1);
+                printf("answer : %d\n", n1);
                 while(!quit){
                         usleep(400000);
                         read(push_dev, &push_buf, buf_s);
@@ -314,11 +331,13 @@ int bridge(void){
                                 printf("you die\n");
                                 text_call("you die");
                                 printf("game 1 failed\n");
-                                return 0;
+				close_devices();
+                                exit(0);
                         }
                 }
         }
-
+	text_call("Game 1 clear");
+    	printf("Game 1 clear\n");
         //close(dev);
         return 0;
 }
@@ -349,6 +368,7 @@ void *GetAnswer(){
 	int tid=pthread_self();
 
 	while(1){
+		sleep(1);
 		if((f=fopen("answer.txt","r"))){
 			printf("game.c -> start reading\n");
 			char *str;
