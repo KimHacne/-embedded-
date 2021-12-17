@@ -8,7 +8,7 @@ from firebase_admin import db
 global flag   #if gor equal value then flag = 1 
 flag = 0
 
-cd = cd.Certificate("./embedded-7af04-firebase-adminsdk-dqnk3-648973e6ae.json")
+cd = cd.Certificate("./embedded-7af04-firebase-adminsdk-dqnk3-66111c78a7.json")
 firebase_admin.initialize_app(cd,{
     'databaseURL' : 'https://embedded-7af04-default-rtdb.firebaseio.com/'    
 })
