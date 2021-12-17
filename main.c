@@ -20,6 +20,9 @@
 #define MAX_BUTTON 9
 unsigned char quit = 0;
 
+int timeout = 1; //global time
+int success = 0; //break timeout
+
 //game2 에서 사용됨
 int equal = 0;
 int start = 0;
@@ -55,6 +58,8 @@ void motor_call(int onoff , int dir);
 void go(void);
 void open_devices(void);
 void close_devices(void);
+void greeting();
+void *timer();
 
 //game1 함수
 void game1(void);
@@ -74,15 +79,15 @@ int main(void)
 	go();
     sleep(1);
     game1();
-	usleep(1000000);
+	greeting();
 	game2();
 
 //	fnd_call(1111);
 //	dot_call(2);
 //	led_call();
-    usleep(10000000);
-	motor_call(0 , 0);
 
+	greeting();
+	dot_call(0);
 	close_devices();
 
 	return 0;
@@ -91,17 +96,18 @@ int main(void)
 void go(void)
 {
 	text_call("Welcome to the  3leg nakg game!");
-	led_call();
+	greeting();
 }
 void game1()
 {
 	text_call("  game 1 start  crossbridge game");
 	printf("game 1 start! \n");
 	dot_call(1);
-
+	
+	
     if(bridge()<0)
         printf("bridge err\n");
-
+	
 
 
 }
@@ -110,7 +116,7 @@ void game2(void)
 	text_call("  game 2 start  speednumber game");
 	printf("game 2 start! \n");
 	dot_call(2);
-	
+
     pthread_t thread;
 	int t;
     char *zero ="0000";
@@ -280,7 +286,8 @@ void open_devices(void)
 }
 void close_devices(void)
 {
-
+	motor_call(0,1);
+	dot_call(0);
 	close(push_dev);
 	close(dot_dev);
 	close(fnd_dev);
@@ -300,6 +307,8 @@ int bridge(void){
         unsigned char push_sw_buff[MAX_BUTTON];
         unsigned char push_buf[3][3];
 
+	int tmp = 0;
+	pthread_t t;
         //dev = open("/dev/fpga_push_switch", O_RDWR);
         // if (dev<0){
         //         printf("Device Open Error\n");
@@ -311,17 +320,26 @@ int bridge(void){
         buf_s=sizeof(push_buf);
 
 
+	t = pthread_create(&t,NULL,timer,NULL);
+
         //printf("Press <ctrl+c> to quit. \n");
         int cnt = 1;
         printf("====Game Start : Push Switch====\n");
         for(int k=2;k>=0;k--){
+		
                 int n1, n2, n3;
                 putRan(&n1, &n2, &n3);
                 printf("answer : %d\n", n1);
                 while(!quit){
+			if(timeout == 0){
+				close_devices();
+				exit(0);
+			}
+
                         usleep(400000);
                         read(push_dev, &push_buf, buf_s);
 
+			dot_call(3-k);
                         if(push_buf[k][n1]==1){
                                 printf("stage %d : Success\n", cnt);
                                 cnt++;
@@ -331,6 +349,7 @@ int bridge(void){
                                 printf("you die\n");
                                 text_call("you die");
                                 printf("game 1 failed\n");
+				motor_call(0,1);
 				close_devices();
                                 exit(0);
                         }
@@ -338,6 +357,9 @@ int bridge(void){
         }
 	text_call("Game 1 clear");
     	printf("Game 1 clear\n");
+	pthread_join(t,(void*)&tmp);
+	success = 1;
+	motor_call(0,1);
         //close(dev);
         return 0;
 }
@@ -404,4 +426,31 @@ void *GetAnswer(){
 		}				
 	}
 	pthread_exit(NULL);
+}
+void greeting(){
+	motor_call(1,1);
+	led_call();
+	motor_call(0,1);
+}
+
+void *timer(){
+	int t = 10;
+	char s[10];
+	motor_call(1,1);
+	while(t != 0){
+		if(success == 1){
+			pthread_exit(NULL);
+		}
+		printf("%d sec left\n",t);
+		sprintf(s,"%d",t);
+		text_call(s);
+		sleep(1);
+		t--;
+	}
+	if(t ==0) {
+		timeout =0;
+		motor_call(0,1);
+		text_call("timeout , you die");
+		
+	}
 }
